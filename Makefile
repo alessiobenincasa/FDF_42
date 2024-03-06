@@ -2,9 +2,12 @@ NAME = fdf
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
+SRCS_DIR = src
 SRCS = main.c get_next_line.c read_map.c draw_grid.c color.c map_to_point.c keys.c keys2.c keys3.c mouse.c transformations.c menu.c screen.c rotations.c check_map.c check_map2.c
+SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
+
 OBJS_DIR = objs
-OBJS = $(addprefix $(OBJS_DIR)/,$(SRCS:.c=.o))
+OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 
 LIB_MINILIBX = -Lminilibx -lmlx -lXext -lX11 -lm -lz
 LIB_LIBFT = Libft/libft.a
@@ -33,7 +36,7 @@ $(NAME): lib $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIB_MINILIBX) $(LIB_LIBFT) -o $(NAME)
 	@echo "$(GREEN)\n$(NAME) compiled successfully!$(RESET)"
 
-$(OBJS_DIR)/%.o: %.c
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	@mkdir -p $(OBJS_DIR)
 	@$(call progress_bar)
 	$(CC) $(CFLAGS) -c $< -o $@
